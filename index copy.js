@@ -33,7 +33,6 @@ let io = require('socket.io')(http,{
       credentials: true
     }
   })
-// const logger = require('../services/logger')
 
 io.on("connection", (socket)=>{
     let startTime = moment().format('HH:mm:ss')
