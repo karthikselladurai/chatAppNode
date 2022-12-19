@@ -84,7 +84,7 @@ exports.registration = async (req, res) => {
 }
 exports.getAllUser = async(req,res)=>{
     try{
-        resp = await user.findAll(/*{where:{id:{[Sequelize.Op.not]:req.params['id']}}}*/).then(resp=>{
+        resp = await user.findAll({where:{id:{[Sequelize.Op.not]:req.params['id']}}}).then(resp=>{
             res.send({status:"success",msg:"All user details",data:resp})
         }).catch(err=>{
             logger.error({status:"unsucess",msg:err,data:{}})
