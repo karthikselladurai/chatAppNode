@@ -1,5 +1,5 @@
 const express = require('express');
-const logger = require('../app/src/services/logger')
+const logger = require('../chatAppNode/src/services/logger')
 const app = express();
 const commanRoute = require('./src/routes/commonRoutes')
 const chatRoute = require('./src/chat/chatRoutes/chatRoutes')
@@ -7,14 +7,16 @@ var http = require('http').Server(app);
 const cors = require('cors')
 require('dotenv').config()
 let PORT = process.env.PORT | 4000
-const user = require('../app/src/model/model')
+const user = require('../chatAppNode/src/model/model')
 let sample = require('./src/controller/controler')
 const moment = require('moment');
 const { start } = require('repl');
-const { InMemorySessionStore } = require('../app/src/chat/sessionStore');
+const { InMemorySessionStore } = require('../chatAppNode/src/chat/sessionStore');
 const sessionStore = new InMemorySessionStore();
 const crypto = require("crypto");
 const randomId = () => crypto.randomBytes(8).toString("hex");
+const { InMemoryMessageStore } = require('../chatAppNode/src/chat/messageStore');
+const messageStore = new InMemoryMessageStore();
 
 
 
@@ -25,7 +27,7 @@ app.use(cors());
 // app.use(express.session());
 // user.sync({force:true})
 
-require('../app/src/config/DBcon')
+require('../chatAppNode/src/config/DBcon')
 
 // sample.sample()
 
@@ -73,9 +75,6 @@ io.on("connection", (socket) => {
 
   let startTime = moment().format('HH:mm:ss')
   logger.info({ status: "success", message: "socket connection", time: startTime })
-
-  console.log(socket.sessionID);
-  // ioMiddleWare(socket)
   // persist session
   console.log(socket.username);
   sessionStore.saveSession(socket.sessionID, {
@@ -94,6 +93,16 @@ io.on("connection", (socket) => {
   socket.join(socket.userID);
   // fetch existing users
   const users = [];
+  const messagesPerUser = new Map();
+  messageStore.findMessagesForUser(socket.userID).forEach((message) => {
+    const { from, to } = message;
+    const otherUser = socket.userID === from ? to : from;
+    if (messagesPerUser.has(otherUser)) {
+      messagesPerUser.get(otherUser).push(message);
+    } else {
+      messagesPerUser.set(otherUser, [message]);
+    }
+  });
   sessionStore.findAllSessions().forEach((session) => {
     console.log("session",session);
     users.push({
@@ -105,8 +114,14 @@ io.on("connection", (socket) => {
   console.log(users);
   socket.emit("users", users);
   socket.on('private message', (data) => {
+    const message = {
+      content:data.content  ,
+      from: socket.userID,
+      to:data.to,
+    }
     logger.info({ from: data.from, to: data.to, content: data.content })
-    io.to(data.to).emit('private message', { content:data.content });
+    io.to(data.to).to(socket.userID).emit("private message", message);
+    messageStore.saveMessage(message);
   });
 })
 //  });
