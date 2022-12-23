@@ -3,11 +3,15 @@ const logger = require('../chatAppNode/src/services/logger')
 const app = express();
 const commanRoute = require('./src/routes/commonRoutes')
 const chatRoute = require('./src/chat/chatRoutes/chatRoutes')
+const productRouter = require('./src/products/router')
 var http = require('http').Server(app);
 const cors = require('cors')
 require('dotenv').config()
 let PORT = process.env.PORT | 4000
 const user = require('../chatAppNode/src/model/model')
+const { products,
+  productElectronic,
+  productLaptop} = require('./src/products/model/model')
 let sample = require('./src/controller/controler')
 const moment = require('moment');
 const { start } = require('repl');
@@ -26,6 +30,9 @@ app.use(cors());
 // app.use(express.cookieParser());
 // app.use(express.session());
 // user.sync({force:true})
+// products.sync({force:true})
+// productElectronic.sync({force:true})
+// productLaptop.sync({force:true})
 
 require('../chatAppNode/src/config/DBcon')
 
@@ -34,6 +41,7 @@ require('../chatAppNode/src/config/DBcon')
 // require('../chatBotNode/src/chat/IoCon') 
 app.use('/api/user', commanRoute)
 app.use('/api/user/chat', chatRoute)
+app.use('/api/user/product',productRouter)
 app.use(express.static("public"));
 // const server= require('../../index') 
 let io = require('socket.io')(http, {

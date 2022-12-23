@@ -1,4 +1,4 @@
-const user = require('../../model/model')
+const {user} = require('../../model/model')
 const logger = require('../../services/logger');
 const moment = require('moment')
 
