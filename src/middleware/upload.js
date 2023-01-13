@@ -12,14 +12,15 @@ const imageFilter = (req, file, cb) => {
 };
 
 var storage = multer.diskStorage({
-  destination: (req, file, cb) => {
+  destination:(req, file, cb) => {
     console.log("__basedir",env.PATH1 );    
-    cb(null,env.PATH1  );
+    cb(null,env.PATH1 );
   },
   filename: (req, file, cb) => {
-    cb(null, `${file.originalname}`);
-  },
+    console.log(file.originalname)
+    cb(null, file.originalname);
+  }
 });
 
-var uploadFile = multer({ storage: storage, fileFilter: imageFilter });
+var uploadFile = multer({ storage: storage/*,fileFilter: imageFilter */});
 module.exports = uploadFile

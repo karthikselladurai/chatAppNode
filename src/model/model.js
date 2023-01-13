@@ -2,7 +2,10 @@ const Sequelize = require('sequelize');
 const sequelize = require('../config/DBcon')
 
 const user = sequelize.define('user', {
-
+    userMasterId: {
+        type: Sequelize.STRING(30),
+        allowNull: false
+    },
     userFirstName: {
         type: Sequelize.STRING(30),
         allowNull: false

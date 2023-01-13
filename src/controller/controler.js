@@ -7,6 +7,8 @@ const { loginSchema, registerSchema } = require('../middleware/joiValidation');
 const bcrypt = require('bcrypt');
 const sequelize = require('../config/DBcon');
 const Sequelize = require('sequelize');
+const crypto = require("crypto");
+const randomId = () => crypto.randomBytes(5).toString("hex");
 
 
 exports.login = async function (req, res) {
@@ -48,6 +50,7 @@ exports.registration = async (req, res) => {
     req = req.body
     console.log(env.SALT);
     let insertData = {
+        userMasterId:randomId(),
         userFirstName: req.userFirstName,
         userLastName: req.userLastName,
         userEmail: req.userEmail,

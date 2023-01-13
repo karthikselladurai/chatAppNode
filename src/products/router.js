@@ -7,8 +7,9 @@ console.log(">");
 
 route.get('/products',ctrl.products);
 route.post('/insert',ctrl.insertProduct);
-route.post('/upload',uploadFile.single('laptopImg'))
-route.post('/laptop',ctrl.insertLaptop)
+route.post('/upload',uploadFile.single('productImg'))
+route.get('/getItems',ctrl.getItems)
+// route.post('/electronicProduct',ctrl.electronicProduct)
 
 
 

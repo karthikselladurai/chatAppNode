@@ -9,9 +9,7 @@ const cors = require('cors')
 require('dotenv').config()
 let PORT = process.env.PORT | 4000
 const user = require('../chatAppNode/src/model/model')
-const { products,
-  productElectronic,
-  productLaptop} = require('./src/products/model/model')
+const { productList,productItems} = require('./src/products/model/productModel')
 let sample = require('./src/controller/controler')
 const moment = require('moment');
 const { start } = require('repl');
@@ -29,10 +27,9 @@ app.use(express.json());
 app.use(cors());
 // app.use(express.cookieParser());
 // app.use(express.session());
-// user.sync({force:true})
-// products.sync({force:true})
-// productElectronic.sync({force:true})
-// productLaptop.sync({force:true})
+user.sync({alter: true})
+productList.sync({alter: true})
+productItems.sync({alter: true})
 
 require('../chatAppNode/src/config/DBcon')
 

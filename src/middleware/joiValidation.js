@@ -1,7 +1,6 @@
 const joi = require('joi');
-
-
 const registerSchema = joi.object({
+    userMasterId:joi.string().required(),
     userFirstName: joi.string().required(),
     userLastName: joi.string().required(),
     mobileNumber: joi.number().required(),
