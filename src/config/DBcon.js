@@ -6,7 +6,8 @@ const sequelize = new Sequelize(
    'Ka6th1kkdm10@#', {
 
       dialect: 'mysql',                         
-      host: 'localhost'
+      host: 'localhost',
+      logging: false
    }
 );
 sequelize.authenticate().then(() => {

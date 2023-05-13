@@ -33,7 +33,7 @@ const   productItems = sequelize.define('productitems',{
         type: Sequelize.STRING(30),
         allowNull: false
     },
-    productColor:{
+    pruductColor:{
         type: Sequelize.STRING(30),
         allowNull: false
     },
@@ -43,6 +43,14 @@ const   productItems = sequelize.define('productitems',{
     },
     pruductImageUrl:{
         type:Sequelize.STRING(300),
+        allowNull:true
+    },
+    productImageUrl:{
+        type:Sequelize.JSON(),
+        allowNull:true
+    },
+    imageUrl:{
+        type:Sequelize.JSON(),
         allowNull:true
     }
     
